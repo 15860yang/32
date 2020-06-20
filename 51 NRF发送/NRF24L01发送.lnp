@@ -1,0 +1,5 @@
+"NRF24L01·¢ËÍ.obj",
+"NRF24L01.obj",
+"XPT2046.obj" 
+TO "NRF24L01·¢ËÍ" 
+RAMSIZE(256) 

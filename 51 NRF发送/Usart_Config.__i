@@ -1,0 +1,1 @@
+"Usart\Usart_Config.c" BROWSE INCDIR(.\NRF2401;.\Usart) DEBUG OBJECTEXTEND PRINT(.\Usart_Config.lst) TABS (2) OBJECT(Usart_Config.obj)

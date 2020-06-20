@@ -1,0 +1,76 @@
+C51 COMPILER V8.08   USART_CONFIG                                                          02/24/2013 15:31:23 PAGE 1   
+
+
+C51 COMPILER V8.08, COMPILATION OF MODULE USART_CONFIG
+OBJECT MODULE PLACED IN Usart_Config.obj
+COMPILER INVOKED BY: E:\StudySoftWare\Keil\C51\BIN\C51.EXE Usart\Usart_Config.c BROWSE INCDIR(.\NRF2401;.\Usart) DEBUG O
+                    -BJECTEXTEND PRINT(.\Usart_Config.lst) TABS(2) OBJECT(Usart_Config.obj)
+
+line level    source
+
+   1          /*************************************DoWell电子******************************************************
+   2          @文件名    : Usart_Config.c
+   3          @描述      : 51单片机串口配置
+   4          @实验平台  : nRF24l01无线模块+STC89C52最小系统板（带有nRF24L01模块接口）
+   5          @
+   6          @作者      :镁天   QQ:1402330827    技术讨论/支持QQ群:121597570(加群请通过旺旺向店主获得验证码)
+   7          @
+   8          @电子邮箱  :wshww123@yeah.net
+   9          @
+  10          @
+  11          @版权归属  : 供给学习参考使用，未经允许请勿使用在其他用途
+  12          ****************************************************************************************************/
+  13          #include <reg52.h>
+  14          #include "Usart_Config.h"
+  15          
+  16          #define FOSC 11059200L
+  17          #define BAUD 115200
+  18          /********************************************************************************
+  19          @函数名称:  InitUSART()
+  20          @描述：     串口初始化
+  21          @输入：     tx_buf  发送数据缓冲地址指针
+  22          @输出：     无                                                      
+  23          @返回：     无
+  24          @注意事项： 先设置接收端的地址，应答时需要，接收端地址需要与发送端一致。接着装载
+  25                      要发送的数据，最后设置为发送模式，把CE设置为高电平启动发送，时间最少为10us
+  26          ********************************************************************************/
+  27          void InitUSART()  //波特率9600
+  28          {  
+  29   1        PCON = 0x00;              
+  30   1        SCON = 0x50;    //选择方式1
+  31   1        TMOD = 0x20;    //定时器1 工作方式2 8位自动重装   
+  32   1        TH1 = TL1 = 256 -(FOSC/32/BAUD);//设置波特率定时器初值  
+  33   1        TR1  = 1;       //启动定时器
+  34   1      }
+  35          /********************************************************************************
+  36          @函数名称:  Rx_Byte()
+  37          @描述：     串口发送
+  38          @输入：     R_Byte  将要发送的数据
+  39          @输出：     无                                                      
+  40          @返回：     无
+  41          @注意事项： 有些人对这点很不明白，它是怎么发送的。我呢就说下吧，只要向SBUF这个寄存
+  42                      器放入数据，在串口发送开启的状态下回自动启动发送的，不用CPU的干预，硬
+  43                      件自行操作，只需要判断TI这个标志就行了，发送时为0，完成发送会被置1
+  44          ********************************************************************************/
+  45          void Rx_Byte(uchar R_Byte)
+  46          {   
+  47   1        SBUF = R_Byte;          //装载数据到串口缓冲
+  48   1        while( TI == 0 );       //查询发送完成标志
+  49   1        TI = 0;                 //清楚完成标志
+  50   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     26    ----
+C51 COMPILER V8.08   USART_CONFIG                                                          02/24/2013 15:31:23 PAGE 2   
+
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
